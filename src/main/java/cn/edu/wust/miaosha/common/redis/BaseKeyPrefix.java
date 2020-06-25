@@ -6,16 +6,16 @@ package cn.edu.wust.miaosha.common.redis;
  * @Description
  * @Verion 1.0
  */
-public abstract class BasePrefix implements KeyPrefix {
+public abstract class BaseKeyPrefix implements KeyPrefix {
     private int expireSeconds;
 
     private String prefix;
 
-    public BasePrefix(String prefix) {
+    public BaseKeyPrefix(String prefix) {
         this(0, prefix);
     }
 
-    public BasePrefix(int expireSeconds, String prefix) {
+    public BaseKeyPrefix(int expireSeconds, String prefix) {
         this.expireSeconds = expireSeconds;
         this.prefix = prefix;
     }

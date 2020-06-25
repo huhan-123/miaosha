@@ -79,7 +79,12 @@
 			<version>3.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 
+<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -90,10 +95,10 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
-	<build>
+	<!--<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -102,19 +107,19 @@
 		</plugins>
 		<resources>
 			<resource>
-				<!--加载资源目录-->
+				&lt;!&ndash;加载资源目录&ndash;&gt;
 				<directory>src/main/resources</directory>
 				<includes>
-					<!--加载配置文件-->
+					&lt;!&ndash;加载配置文件&ndash;&gt;
 					<include>**/*.xml</include>
 					<include>**/*.properties</include>
-					<!--加载模板文件-->
+					&lt;!&ndash;加载模板文件&ndash;&gt;
 					<include>**/*.html</include>
-					<!--加载静态文件-->
+					&lt;!&ndash;加载静态文件&ndash;&gt;
 					<include>/static/</include>
 				</includes>
 			</resource>
 		</resources>
-	</build>
+	</build>-->
 
 </project>

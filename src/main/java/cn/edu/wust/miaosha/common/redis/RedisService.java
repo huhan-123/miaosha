@@ -52,13 +52,18 @@ public class RedisService {
     public <T> boolean set(KeyPrefix prefix, String key, T value) {
         Jedis jedis = null;
         try {
+            //获取Jedis对象
             jedis = jedisPool.getResource();
+            //将value转化为String类型
             String str = beanToString(value);
             if (str == null || str.length() <= 0) {
                 return false;
             }
+            //得到key
             String realKey = prefix.getPrefix() + key;
+            //得到过期时间
             int seconds = prefix.getExpireSeconds();
+            //将key，value存入redis
             if (seconds <= 0) {
                 jedis.set(realKey, (String) str);
             } else {
