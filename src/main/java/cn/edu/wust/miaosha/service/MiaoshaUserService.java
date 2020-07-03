@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 public interface MiaoshaUserService {
     MiaoshaUser getById(long id);
 
-    boolean login(HttpServletResponse response, LoginVo loginVo);
+    String login(HttpServletResponse response, LoginVo loginVo);
 
     MiaoshaUser getByToken(HttpServletResponse response, String token);
+
+    boolean updatePassword(long id, String password,String token);
 }

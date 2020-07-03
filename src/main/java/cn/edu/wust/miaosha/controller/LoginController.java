@@ -2,10 +2,12 @@ package cn.edu.wust.miaosha.controller;
 
 import cn.edu.wust.miaosha.common.Result;
 import cn.edu.wust.miaosha.common.redis.RedisService;
+import cn.edu.wust.miaosha.entity.MiaoshaUser;
 import cn.edu.wust.miaosha.service.MiaoshaUserService;
 import cn.edu.wust.miaosha.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,8 +36,14 @@ public class LoginController {
 
     @RequestMapping("/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
-        miaoshaUserService.login(response, loginVo);
-        return Result.success(true);
+    public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
+        String token = miaoshaUserService.login(response, loginVo);
+        return Result.success(token);
+    }
+
+    @RequestMapping("/info")
+    @ResponseBody
+    public Result<MiaoshaUser> info(Model model, MiaoshaUser miaoshaUser) {
+        return Result.success(miaoshaUser);
     }
 }

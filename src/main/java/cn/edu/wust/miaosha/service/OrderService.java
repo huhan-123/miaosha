@@ -1,6 +1,5 @@
 package cn.edu.wust.miaosha.service;
 
-import cn.edu.wust.miaosha.entity.MiaoshaGoods;
 import cn.edu.wust.miaosha.entity.MiaoshaOrder;
 import cn.edu.wust.miaosha.entity.MiaoshaUser;
 import cn.edu.wust.miaosha.entity.OrderInfo;
@@ -15,5 +14,7 @@ import cn.edu.wust.miaosha.vo.GoodsVo;
 public interface OrderService {
     MiaoshaOrder getOrderInfoByUserIdAndGoodsId(long userId, long goodsId);
 
-    OrderInfo createOrder(MiaoshaUser miaoshaUser, MiaoshaGoods goods);
+    OrderInfo createOrder(MiaoshaUser miaoshaUser, GoodsVo goods);
+
+    OrderInfo getOrderById(long orderId);
 }

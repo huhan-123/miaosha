@@ -45,12 +45,15 @@ public class MiaoshaUserArgumentResolver implements HandlerMethodArgumentResolve
         if (StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken)) {
             return null;
         }
-        String token = StringUtils.isNotEmpty(paramToken)?paramToken:cookieToken;
+        String token = StringUtils.isNotEmpty(paramToken) ? paramToken : cookieToken;
         return miaoshaUserService.getByToken(response, token);
     }
 
     private String getCookieToken(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookies.length <= 0) {
+            return null;
+        }
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(cookieName)) {
                 return cookie.getValue();

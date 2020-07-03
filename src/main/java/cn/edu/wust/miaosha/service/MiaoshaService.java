@@ -12,4 +12,6 @@ import cn.edu.wust.miaosha.vo.GoodsVo;
  */
 public interface MiaoshaService {
     OrderInfo miaosha(MiaoshaUser miaoshaUser, GoodsVo go);
+
+    long getMiaoshaResult(MiaoshaUser miaoshaUser, long goodsId);
 }

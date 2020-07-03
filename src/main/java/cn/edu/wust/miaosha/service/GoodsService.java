@@ -1,7 +1,5 @@
 package cn.edu.wust.miaosha.service;
 
-import cn.edu.wust.miaosha.entity.Goods;
-import cn.edu.wust.miaosha.entity.MiaoshaGoods;
 import cn.edu.wust.miaosha.vo.GoodsVo;
 
 import java.util.List;
@@ -17,5 +15,5 @@ public interface GoodsService {
 
     GoodsVo getGoodsVoById(long goodsId);
 
-    int reduceStock(MiaoshaGoods goods);
+    boolean reduceStock(GoodsVo goods);
 }

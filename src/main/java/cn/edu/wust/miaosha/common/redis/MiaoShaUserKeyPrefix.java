@@ -17,5 +17,6 @@ public class MiaoShaUserKeyPrefix extends BaseKeyPrefix {
         super(expireSeconds, prefix);
     }
 
-    public static final MiaoShaUserKeyPrefix token = new MiaoShaUserKeyPrefix(TOKEN_EXPIRE,"tk");
+    public static final MiaoShaUserKeyPrefix getByToken = new MiaoShaUserKeyPrefix(TOKEN_EXPIRE,"tk");
+    public static final MiaoShaUserKeyPrefix getById = new MiaoShaUserKeyPrefix("id");
 }

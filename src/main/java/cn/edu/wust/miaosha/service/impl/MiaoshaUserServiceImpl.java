@@ -34,7 +34,7 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
     private RedisService redisService;
 
     @Override
-    public boolean login(HttpServletResponse response, LoginVo loginVo) {
+    public String login(HttpServletResponse response, LoginVo loginVo) {
         if (loginVo == null) {
             throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
@@ -47,12 +47,13 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
         }
         //验证密码
         String dbPassword = user.getPassword();
+        String s = MD5Util.formPassToDBPass(password, user.getSalt());
         if (!dbPassword.equals(MD5Util.formPassToDBPass(password, user.getSalt()))) {
             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
         String token = UUIDUtil.uuid();
         addCookie(response, user, token);
-        return true;
+        return token;
     }
 
     @Override
@@ -60,7 +61,8 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        MiaoshaUser user = redisService.get(MiaoShaUserKeyPrefix.token, token, MiaoshaUser.class);
+        String s = MiaoShaUserKeyPrefix.getByToken + token;
+        MiaoshaUser user = redisService.get(MiaoShaUserKeyPrefix.getByToken, token, MiaoshaUser.class);
         //每次访问服务端都需要更新token过期时间
         if (user != null) {
             addCookie(response, user, token);
@@ -69,16 +71,43 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
     }
 
     @Override
+    public boolean updatePassword(long id, String password,String token) {
+        MiaoshaUser miaoshaUser = getById(id);
+        if (miaoshaUser == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+        String convertedPass = MD5Util.formPassToDBPass(password, miaoshaUser.getSalt());
+        //如果两个密码不一样，则需要更改密码，同时删除缓存
+        if (!convertedPass.equals(miaoshaUser.getPassword())) {
+            //这里必须先更新数据库，再删除缓存
+            miaoshaUser.setPassword(convertedPass);
+            miaoshaUserMapper.updatePassword(miaoshaUser);
+            redisService.delete(MiaoShaUserKeyPrefix.getById, String.valueOf(id));
+            redisService.delete(MiaoShaUserKeyPrefix.getByToken,token);
+        }
+        return true;
+    }
+
+    @Override
     public MiaoshaUser getById(long id) {
-        return miaoshaUserMapper.getById(id);
+        MiaoshaUser miaoshaUser = redisService.get(MiaoShaUserKeyPrefix.getById, "" + id, MiaoshaUser.class);
+        if (miaoshaUser != null) {
+            return miaoshaUser;
+        }
+
+        miaoshaUser = miaoshaUserMapper.getById(id);
+        if (miaoshaUser != null) {
+            redisService.set(MiaoShaUserKeyPrefix.getById, "" + id, miaoshaUser);
+        }
+        return miaoshaUser;
     }
 
     private void addCookie(HttpServletResponse response, MiaoshaUser user, String token) {
         //将token，用户信息放入redis缓存
-        redisService.set(MiaoShaUserKeyPrefix.token, token, user);
+        redisService.set(MiaoShaUserKeyPrefix.getByToken, token, user);
         //将token放入cookie
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
-        cookie.setMaxAge(MiaoShaUserKeyPrefix.token.getExpireSeconds());
+        cookie.setMaxAge(MiaoShaUserKeyPrefix.getByToken.getExpireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
     }

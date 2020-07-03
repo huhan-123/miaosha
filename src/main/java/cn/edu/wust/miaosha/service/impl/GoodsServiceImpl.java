@@ -1,6 +1,5 @@
 package cn.edu.wust.miaosha.service.impl;
 
-import cn.edu.wust.miaosha.entity.MiaoshaGoods;
 import cn.edu.wust.miaosha.mapper.GoodsMapper;
 import cn.edu.wust.miaosha.service.GoodsService;
 import cn.edu.wust.miaosha.vo.GoodsVo;
@@ -31,7 +30,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public int reduceStock(MiaoshaGoods goods) {
-        return goodsMapper.reduceStock(goods);
+    public boolean reduceStock(GoodsVo goods) {
+        return goodsMapper.reduceStock(goods) > 0;
     }
 }
